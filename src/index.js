@@ -1,8 +1,7 @@
 import React from "react";
 import "./index.css";
 import reactDOM, { createRoot } from "react-dom/client";
-const pizzaData = [
-  {
+const pizzaData = [  {
     name: "Focaccia",
     ingredients: "Bread with italian olive oil and rosemary",
     price: 6,
@@ -47,58 +46,77 @@ const pizzaData = [
 ];
 
 function App() {
+  const openHour=8;// for 8:00 AM
+  const closeHour=23;// for 11:00 PM
   return (
+
     <div className="container">
       <Header />
       <Menu />
-      <Footer />
+      {/* {new Date().to} */}
+      <Order/>
+      <Footer openHour={openHour} closeHour={closeHour} />
     </div>
+  );
+}
+function Order(){
+  return(
+<div>
+  <button className="btn">Order Now</button>
+</div>
   );
 }
 function Header() {
   return (
     <header className="header">
-      <h1>fast pizza co.</h1>
+      <h1>Fast React Pizza Co.</h1>
     </header>
   );
 }
 function Menu() {
-  console.log("welcome!!");
-
   return (
     <main className="menu">
-      <h2>Menu:</h2>
+
+      <h2>Our menu</h2>
+      {(pizzaData.length>0) ?(<p>Authentic Italian cuisine. 6 creative dishes to choose from. All from our stone oven, all organic, all delicious.</p>)
+      : (<p>comming&nbsp;soon...</p>)}
+
       <ul className="pizzas">
         {
         pizzaData.map((pizza) => (
           <Pizza key={pizza.name} pizzaObj={pizza} />
         ))
-        }ى  
+        }
       </ul>
 
       {/* <Pizza /> */}
     </main>
   );
+ 
 }
-function Footer() {
+function Footer({openHour,closeHour}) {
+  const currentDate =new Date();
   return (
     <footer className="footer">
-      it's {new Date().toLocaleTimeString()}, we're open
+      it's {currentDate.toLocaleTimeString()}, {(currentDate.getHours()>=openHour && currentDate.getHours()<=closeHour ?"we're open"
+        :`We're happy to welcome you between ${openHour}:00 AM and ${closeHour}:00 PM` )}
     </footer>
     // React.createElement("h1",null,"here is the footer")
   );
 }
 
-function Pizza(props) {
+function Pizza({pizzaObj}) {
   return (
-    <div className="pizza">
-      <img src={props.pizzaObj.photoName} alt="spinaci" />
+    <div className={`pizza ${(pizzaObj.soldOut)?"sold-out" :" "}`} >
+      <img src={pizzaObj.photoName} alt="spinaci" />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
 
         {/* pass it as a number */}
-        <span>price </span>
+        <span>
+          {`${pizzaObj.price} $`} 
+          </span>
       </div>
     </div>
   );
